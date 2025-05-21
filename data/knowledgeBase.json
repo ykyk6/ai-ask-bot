@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "topic": "利息資訊無法表示",
+    "question": "為什麼無法顯示利息資料?",
+    "question_variants": [
+      "無法查看利息資料",
+      "查看利息時出現error訊息",
+      "想確認利息訊息，無法點擊下一頁"
+    ],
+    "answer": "請確認Agreement設定裡，適格擔保物的Booking Type都設定為VM&IM",
+    "answer_ja": "Agreement設定で適格担保のBooking Typeがすべて「VM&IM」に設定されていることをご確認ください。",
+    "answer_en": "Please check that the Booking Type for Eligible Collateral is set to 'VM&IM' in the Agreement settings.",
+    "background": "由於版本15的bug，導致當Agreement設定裡適格擔保物的Booking Type沒有被設定為VM&IM時，利息頁裡的該筆資料會顯示系統錯誤。",
+    "language": "zh",
+    "tags": ["Interest Manager", "系統錯誤", "利息", "版本15"]
+  },
+  {
+    "id": 2,
+    "topic": "Agreement設定",
+    "question": "明明做了IM Agreement，設定裡沒有顯示IM Tri-Party Agent項目。",
+    "question_variants": [
+      "Agreement設定裡沒有顯示IM Tri-Party Agent，導致無法進行相關設定",
+      "想設定IM Tri-Party Agent，但無法設定，怎麼確認?",
+      "已經修改好了，但還是無法顯示IM Tri-Party Agent"
+    ],
+    "answer": "請確認Agreement設定裡，IM Gross Calc是否選擇了Gross",
+    "answer_ja": "Agreement設定で「IM Gross Calc」が「Gross」に選択されているかご確認ください。",
+    "answer_en": "Please confirm whether 'IM Gross Calc' is set to 'Gross' in the Agreement settings.",
+    "background": "當「IM Gross Calc」沒有正確選擇「Gross」時會導致系統判定不是IM，進而無法顯示Tri-Party Agent項目讓客戶設定。當已正確設置後，請進入'編輯'頁面便可顯示出來",
+    "language": "zh",
+    "tags": ["Agreement作成", "Tri-Party Agent", "IM", "Gross"]
+  },
+  {
+    "id": 3,
+    "topic": "EM畫面表示不正確",
+    "question": "明明當天有交易數據，為什麼EM畫面上沒有顯示Margin event?",
+    "question_variants": [
+      "EM畫面上沒有顯示資料",
+      "明明有交易數據，畫面卻沒出現保證金事件？",
+      "系統沒顯示應該有的Margin event，是什麼原因？"
+    ],
+    "answer": "請確認Agreement設定裡，Call Schedule頁面裡的Holiday Centre設置的時區，若當日是休日便無法顯示event",
+    "answer_ja": "設定のCall ScheduleページにあるHoliday Centreのタイムゾーン設定をご確認ください。当日が休日の場合、イベントは表示されません。",
+    "answer_en": "Please check the time zone settings of the Holiday Centre on the Call Schedule page in the Agreement settings. If the date is a holiday in that time zone, the event will not be displayed.",
+    "background": "有交易數據卻沒有顯示Margin event最有可能的情況是: Agreement設定中Call Schedule頁面裡Holiday Centre設置的時區當日正是休日，因此放假不表示業務",
+    "language": "zh",
+    "tags": ["EM畫面", "Holiday Centre", "時區"]
+  },
+  {
+    "id": 4,
+    "topic": "交易送信失敗",
+    "question": "無法送出Margin Letter",
+    "question_variants": [
+      "Letter Setup裡點擊送信卻失敗",
+      "無法向客戶發出交易確認信",
+      "客戶說沒收到交易通知信件"
+    ],
+    "answer": "請確認Agreement設定裡，Contact的郵箱設置是否正確",
+    "answer_ja": "Agreement設定のContact欄にあるメールアドレスの設定が正しいかご確認ください。",
+    "answer_en": "Please confirm whether the email address settings under Contact in the Agreement settings are correct.",
+    "background": "無法發出交易letter(各種類型都是)，最有可能的情況是Agreement設定裡Contact的郵箱設置不正確",
+    "language": "zh",
+    "tags": ["Booking", "mail", "letter"]
+  },
+  {
+    "id": 5,
+    "topic": "交易操作失敗",
+    "question": "無法完成booking",
+    "question_variants": ["想消除event，可以怎麼做?", "交易結帳失敗"],
+    "answer": "請確認錯誤訊息上提示的金額，並嘗試使用該金額重新進行booking操作",
+    "answer_ja": "エラーメッセージに表示されている金額をご確認の上、その金額を使用して再度ブッキング操作をお試しください。",
+    "answer_en": "Please check the amount indicated in the error message and try performing the booking operation again using that amount.",
+    "background": "當客戶想要刪除EM畫面上的event時，可以透過booking該event來實現。若在booking時出現錯誤訊息，確認訊息上的金額並照著金額去booking後能解決問題",
+    "language": "zh",
+    "tags": ["消除交易", "booking失敗"]
+  },
+  {
+    "id": 6,
+    "topic": "交易操作失敗",
+    "question": "booking操作時選擇了擔保物但無法進行下一步",
+    "question_variants": [
+      "無法完成booking",
+      "booking畫面的選項裡找不到想要的擔保物"
+    ],
+    "answer": "請確認在booking畫面上選擇的是適格擔保物",
+    "answer_ja": "ブッキング画面で適格担保が選択されていることをご確認ください。",
+    "answer_en": "Please confirm that an eligible collateral asset is selected on the booking screen.",
+    "background": "當客戶在booking畫面上選擇了Agreement設定裡沒有設定的擔保物時，會導致畫面不動無法進行下一步，但不會有錯誤或警告訊息",
+    "language": "zh",
+    "tags": ["booking失敗", "適格擔保物", "Agreement設定"]
+  }
+]
