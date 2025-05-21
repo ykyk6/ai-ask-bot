@@ -17,14 +17,35 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/ai-ask-bot/server.js"
+      "dest": "ai-ask-bot/server.js"
     },
     {
-      "handle": "filesystem"
+      "src": "/static/(.*)",
+      "dest": "ai-ask-bot/build/static/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "ai-ask-bot/build/favicon.ico"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "ai-ask-bot/build/manifest.json"
+    },
+    {
+      "src": "/logo192.png",
+      "dest": "ai-ask-bot/build/logo192.png"
+    },
+    {
+      "src": "/logo512.png",
+      "dest": "ai-ask-bot/build/logo512.png"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "ai-ask-bot/build/robots.txt"
     },
     {
       "src": "/(.*)",
-      "dest": "/ai-ask-bot/build/$1"
+      "dest": "ai-ask-bot/build/index.html"
     }
   ],
   "env": {
