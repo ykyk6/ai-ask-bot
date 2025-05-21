@@ -5,8 +5,12 @@ import fs from "fs";
 import path from "path";
 import { cosineSimilarity } from "./utils/cosine.js";
 import cors from "cors";
+import { fileURLToPath } from "url";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -25,69 +29,73 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const embeddingsPath = path.join("./data/embeddings.json");
-const knowledgeBase = JSON.parse(fs.readFileSync(embeddingsPath, "utf-8"));
+const embeddingsPath = path.join(__dirname, "data", "embeddings.json");
+console.log("Loading embeddings from:", embeddingsPath);
 
-app.post("/api/query", async (req, res) => {
-  const { question } = req.body;
+try {
+  const knowledgeBase = JSON.parse(fs.readFileSync(embeddingsPath, "utf-8"));
+  console.log("Successfully loaded embeddings.json");
 
-  try {
-    const response = await openai.embeddings.create({
-      model: "text-embedding-3-small",
-      input: question,
-    });
+  app.post("/api/query", async (req, res) => {
+    const { question } = req.body;
 
-    if (
-      response.data &&
-      response.data.length > 0 &&
-      response.data[0].embedding
-    ) {
-      const queryEmbedding = response.data[0].embedding;
+    try {
+      const response = await openai.embeddings.create({
+        model: "text-embedding-3-small",
+        input: question,
+      });
 
-      const scored = knowledgeBase
-        .map((item) => {
-          if (
-            !item.embedding ||
-            item.embedding.length !== queryEmbedding.length
-          ) {
-            return null;
-          }
+      if (
+        response.data &&
+        response.data.length > 0 &&
+        response.data[0].embedding
+      ) {
+        const queryEmbedding = response.data[0].embedding;
 
-          if (item.embedding.some(isNaN) || queryEmbedding.some(isNaN)) {
-            return null;
-          }
+        const scored = knowledgeBase
+          .map((item) => {
+            if (
+              !item.embedding ||
+              item.embedding.length !== queryEmbedding.length
+            ) {
+              return null;
+            }
 
-          const score = cosineSimilarity(queryEmbedding, item.embedding);
-          return {
-            ...item,
-            score,
-          };
-        })
-        .filter((item) => item !== null);
+            if (item.embedding.some(isNaN) || queryEmbedding.some(isNaN)) {
+              return null;
+            }
 
-      const topK = scored.sort((a, b) => b.score - a.score).slice(0, 3);
+            const score = cosineSimilarity(queryEmbedding, item.embedding);
+            return {
+              ...item,
+              score,
+            };
+          })
+          .filter((item) => item !== null);
 
-      const context = topK
-        .map(
-          (item, idx) =>
-            `【資料${idx + 1}】\n主題：${item.topic}\n問題：${
-              item.question
-            }\n答案：${item.answer}\n日語答案：${item.answer_en}\n英語答案：${
-              item.answer_ja
-            }\n背景：${item.background || "無"}\n可能的問法：${
-              item.question_variants
-            }`
-        )
-        .join("\n\n");
+        const topK = scored.sort((a, b) => b.score - a.score).slice(0, 3);
 
-      const prompt = `以下是金融擔保系統的相關資料，請根據這些資訊回答問題: \n\n${context}\n\n使用者提問：${question}`;
+        const context = topK
+          .map(
+            (item, idx) =>
+              `【資料${idx + 1}】\n主題：${item.topic}\n問題：${
+                item.question
+              }\n答案：${item.answer}\n日語答案：${item.answer_en}\n英語答案：${
+                item.answer_ja
+              }\n背景：${item.background || "無"}\n可能的問法：${
+                item.question_variants
+              }`
+          )
+          .join("\n\n");
 
-      const chatCompletion = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "system",
-            content: `你是一位專業金融擔保系統助手，請僅根據以下知識庫資料回覆使用者問題，不得引用未在資料中出現的資訊。請務必用提問者的語言作答，若問題是日文請用敬語，若英文請用商業書信語氣，若中文則保持正式禮貌。
+        const prompt = `以下是金融擔保系統的相關資料，請根據這些資訊回答問題: \n\n${context}\n\n使用者提問：${question}`;
+
+        const chatCompletion = await openai.chat.completions.create({
+          model: "gpt-4",
+          messages: [
+            {
+              role: "system",
+              content: `你是一位專業金融擔保系統助手，請僅根據以下知識庫資料回覆使用者問題，不得引用未在資料中出現的資訊。請務必用提問者的語言作答，若問題是日文請用敬語，若英文請用商業書信語氣，若中文則保持正式禮貌。
 請遵循以下步驟：
 1. 你會多國語言，根據提問的語言回答對應的語言(例如英文問英文答，日文問日文回答，中文問中文回答)。
 2. 閱讀【知識庫】每筆資料的 topic, question, answer, background 等欄位，整合理解脈絡。
@@ -107,28 +115,34 @@ ${context}
 ---
 【使用者問題】
 ${question}`,
-          },
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-      });
+            },
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+        });
 
-      const answer = chatCompletion.choices[0].message.content;
-      res.json({ answer });
-    } else {
-      console.error("API 回應不包含預期的嵌入向量");
-      res.status(500).json({ error: "API 回應不包含預期的嵌入向量" });
+        const answer = chatCompletion.choices[0].message.content;
+        res.json({ answer });
+      } else {
+        console.error("API 回應不包含預期的嵌入向量");
+        res.status(500).json({ error: "API 回應不包含預期的嵌入向量" });
+      }
+    } catch (error) {
+      console.error("查詢過程中出現錯誤:", error.message);
+      console.error("錯誤堆疊:", error.stack);
+      res
+        .status(500)
+        .json({ error: "查詢過程中出現錯誤", details: error.message });
     }
-  } catch (error) {
-    console.error("查詢過程中出現錯誤:", error.message);
-    console.error("錯誤堆疊:", error.stack);
-    res
-      .status(500)
-      .json({ error: "查詢過程中出現錯誤", details: error.message });
-  }
-});
+  });
+} catch (error) {
+  console.error("Error loading embeddings.json:", error);
+  app.post("/api/query", (req, res) => {
+    res.status(500).json({ error: "知識庫載入失敗", details: error.message });
+  });
+}
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
