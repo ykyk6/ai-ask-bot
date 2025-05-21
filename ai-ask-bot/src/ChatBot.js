@@ -424,10 +424,8 @@ const Title = styled.h1`
   background-clip: text;
   color: transparent;
   @media (max-width: 950px) {
-    font-size: 2.1rem;
-  }
-  @media (max-width: 950px) {
-    font-size: 2rem;
+    font-size: 1.9rem;
+    margin-top: -10px;
   }
 `;
 const Subtitle = styled.p`
@@ -437,10 +435,7 @@ const Subtitle = styled.p`
   margin: 0 auto;
   line-height: 1.6;
   @media (max-width: 950px) {
-    font-size: 1rem;
-  }
-  @media (max-width: 950px) {
-    font-size: 1rem;
+    font-size: 14px;
   }
 `;
 const GlassCard = styled.div`
@@ -740,8 +735,9 @@ const Footer = styled.footer`
   font-size: 0.9rem;
   @media (max-width: 950px) {
     margin-top: 3rem;
+    margin-bottom: -10px;
     padding: 1.5rem 0;
-    font-size: 0.8rem;
+    font-size: 12px;
   }
 `;
 
@@ -764,7 +760,7 @@ const LANGUAGES = {
   en: {
     name: "English",
     title: "AI Q&A for Collateral System",
-    subtitle: "Instant response and guidance for your system issues.",
+    subtitle: "Instant response for your system issues.",
     placeholder: "Please enter your question...",
     quickQuestions: [
       "Interest screen is displaying incorrectly",
@@ -778,7 +774,7 @@ const LANGUAGES = {
   },
   ja: {
     name: "日本語",
-    title: "担保システムAI応答サービス",
+    title: "担保システムAI応答",
     subtitle:
       "お客様が直面しているシステム上の問題に対し、適切な対応方針をご案内いたします。",
     placeholder: "ご質問を入力してください...",
@@ -1114,9 +1110,7 @@ function ChatBot() {
             )}
           </ChatArea>
         </QAContainer>
-        <Footer>
-          © 2025 Collateral AI Ask System | Privacy Policy | UserGuide
-        </Footer>
+        <Footer>© 2025 Collateral AI Ask System | Privacy Policy</Footer>
       </Container>
     </>
   );
