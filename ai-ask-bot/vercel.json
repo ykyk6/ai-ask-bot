@@ -3,19 +3,17 @@
   "framework": "create-react-app",
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build",
-        "buildCommand": "npm run vercel-build",
-        "installCommand": "npm install"
-      }
-    },
-    {
       "src": "server.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": ["data/**", "utils/**"]
+      }
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
       }
     }
   ],
@@ -50,7 +48,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "build/index.html"
+      "dest": "/build/$1"
     }
   ],
   "env": {
