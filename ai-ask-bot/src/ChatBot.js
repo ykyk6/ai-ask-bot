@@ -734,8 +734,7 @@ const Footer = styled.footer`
   opacity: 0.7;
   font-size: 0.9rem;
   @media (max-width: 950px) {
-    margin-top: 3rem;
-    margin-bottom: -10px;
+    margin-top: 2rem;
     padding: 1.5rem 0;
     font-size: 12px;
   }
