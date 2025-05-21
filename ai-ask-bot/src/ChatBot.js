@@ -870,10 +870,10 @@ function ChatBot() {
     setLoading(true);
 
     try {
-      console.log("Sending request to:", `${window.location.origin}/api/query`);
-      const response = await axios.post(`${window.location.origin}/api/query`, {
-        question: input,
-      });
+      const response = await axios.post(
+        "https://ai-ask-bot.vercel.app/api/query",
+        { question: input }
+      );
       console.log("Response:", response.data);
       setMessages((msgs) => [
         ...msgs,
