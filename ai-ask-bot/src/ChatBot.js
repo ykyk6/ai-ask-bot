@@ -863,15 +863,16 @@ function ChatBot() {
 
   const handleSend = async () => {
     if (!input.trim()) return;
+
     const userMsg = { type: "user", content: input };
     setMessages((msgs) => [...msgs, userMsg]);
     setInput("");
     setLoading(true);
+
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL || ""}/api/query`,
-        { question: input }
-      );
+      const response = await axios.post(`${window.location.origin}/api/query`, {
+        question: input,
+      });
       setMessages((msgs) => [
         ...msgs,
         { type: "ai", content: response.data.answer },
