@@ -5,7 +5,8 @@
       "src": "ai-ask-bot/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build"
+        "distDir": "build",
+        "buildCommand": "npm run vercel-build"
       }
     }
   ],
