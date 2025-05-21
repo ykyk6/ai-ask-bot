@@ -8,9 +8,17 @@
         "distDir": "build",
         "buildCommand": "npm run vercel-build"
       }
+    },
+    {
+      "src": "ai-ask-bot/server.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "ai-ask-bot/server.js"
+    },
     {
       "src": "/(.*)",
       "dest": "/index.html"
