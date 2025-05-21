@@ -706,7 +706,7 @@ const MessageContent = styled.div`
         : "linear-gradient(135deg, var(--nebula-purple), var(--cosmic-blue))"};
     color: ${({ theme }) => (theme === "light" ? "#fff" : "inherit")};
     border-top-right-radius: 0;
-    text-align: right;
+    text-align: left;
   }
   &.ai-message {
     background: var(--glass-opacity);
