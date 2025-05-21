@@ -868,7 +868,10 @@ function ChatBot() {
     setInput("");
     setLoading(true);
     try {
-      const response = await axios.post("/api/query", { question: input });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL || ""}/api/query`,
+        { question: input }
+      );
       setMessages((msgs) => [
         ...msgs,
         { type: "ai", content: response.data.answer },
