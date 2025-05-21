@@ -870,17 +870,20 @@ function ChatBot() {
     setLoading(true);
 
     try {
+      console.log("Sending request to:", `${window.location.origin}/api/query`);
       const response = await axios.post(`${window.location.origin}/api/query`, {
         question: input,
       });
+      console.log("Response:", response.data);
       setMessages((msgs) => [
         ...msgs,
         { type: "ai", content: response.data.answer },
       ]);
     } catch (error) {
+      console.error("API Error:", error);
       setMessages((msgs) => [
         ...msgs,
-        { type: "ai", content: langData.welcome },
+        { type: "ai", content: "抱歉，連接出現問題，請稍後再試。" },
       ]);
     } finally {
       setLoading(false);
