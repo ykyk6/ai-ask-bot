@@ -916,11 +916,7 @@ function ChatBot() {
 
   const handleQuickQuestion = (q) => {
     if (Date.now() - dragStartTime.current > 200) return;
-
     setInput(q);
-    setTimeout(() => {
-      handleSend();
-    }, 100);
   };
 
   return (
